@@ -1,0 +1,25 @@
+{
+  "name": "AliciaMartinezLopez_Practica5Node.js",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aliciaml16/AliciaMartinezLopez_Practica5Node.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aliciaml16/AliciaMartinezLopez_Practica5Node.js/issues"
+  },
+  "homepage": "https://github.com/aliciaml16/AliciaMartinezLopez_Practica5Node.js#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.6.6"
+  },
+  "devDependencies": {},
+  "description": ""
+}
