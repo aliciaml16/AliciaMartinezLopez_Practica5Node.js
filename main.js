@@ -49,9 +49,9 @@ const server = http.createServer((req, res) => {
         const db = client.db(dbName);
         
         var numeros = /^[0-9]+$/;
-        var letras = /^[a-zA-Z]+$/;
 
-        if (opciones_query["?name"].match(letras) && opciones_query["phone"].match(numeros)) {
+        //Si el número solo contiene números:
+        if (opciones_query["phone"].match(numeros)) {
           //Insertamos el nuevo valor a la Base de Datos
           const collection = db.collection("usuarios");
           const insertResult = await collection.insertOne(opciones_query);
@@ -62,37 +62,38 @@ const server = http.createServer((req, res) => {
           res.statusCode = 200; //Resultado 200
           res.setHeader("Content-Type", "text/html"); //Tipo de texto html
           // Contenido HTML de la respuesta
+          res.write("<html><head><meta charset='UTF-8'></head>");
           res.write("<h2>¡Has introducido un nuevo contacto!</h2>");
           //Incluímos el nuevo dato introducido
           res.write(
             "<p>El nuevo contacto tiene como nombre <strong>" +
               opciones_query["?name"] +
-              "</strong> y su tel&eacutefono es <strong>" +
+              "</strong> y su teléfono es <strong>" +
               opciones_query["phone"] +
               "</strong></p>"
           );
-          res.write(
-            "<p>Este se ha a&ntildeadido a tus contactos. Listamos todos los contactos a continuaci&oacuten</p><ul>"
-          );
+          res.write("<p>Este se ha añadido a tus contactos. Listamos todos los contactos a continuación</p><ul>");
           //Listamos todos los contactos de la lista
           for (let i = 0; i < findResult.length; i++) {
             res.write(
               "<li>Nombre: <i>" +
                 findResult[i]["?name"] +
-                "</i><br> Tel&eacutefono:  <i>" +
+                "</i><br> Teléfono:  <i>" +
                 findResult[i]["phone"] +
                 "</i></li>"
             );
           }
           res.write("</ul>");
+          res.write("</html>");
           res.end();
         } else {
-<<<<<<< HEAD
-            res.write("<p>Los datos introducidos no son correctos. Recuerda que el n&uacutemero de tel&eacutefono solo puede contener n&uacutemeros.</p>");
-=======
-            res.write("<p>Los datos introducidos no son correctos. Recuerda que el nombre solo puede contener letras y el número, números.</p>");
->>>>>>> parent of ddf35dc (Cambio error caracteres)
-            res.end();
+          //Texto que se mostrará en pantalla si no se puede añadir un nuevo contacto
+          res.setHeader("Content-Type", "text/html"); 
+          res.write("<html><head><meta charset='UTF-8'></head>");
+          res.write("<h2>¡Datos incorrectos!</h2>");
+          res.write("<p>Los datos introducidos no son correctos. Recuerda que el número de teléfono solo puede contener números.</p>");
+          res.write("</html>");
+          res.end();
         }
       })
       //En caso de error:
@@ -104,11 +105,41 @@ const server = http.createServer((req, res) => {
         client.close();
       });
   } else {
-    //En caso de que no funcione, cambiamos el código a 404
-    res.statusCode = 404;
-    console.log("El servidor solo acepta método POST");
-    res.write("<p>El env&iacuteo de datos tiene que ser mediante el m&eacutetodo POST (utiliza Postman)</p>");
-    res.end();
+    client
+      .connect()
+      .then(async () => {
+        console.log("Conectado con éxito al servidor");
+        const db = client.db(dbName);
+
+        //Insertamos el nuevo valor a la Base de Datos
+        const collection = db.collection("usuarios");
+        const findResult = await collection.find({}).toArray();
+
+        //En caso de que no funcione, cambiamos el código a 404
+        res.statusCode = 404;
+        console.log("El servidor solo acepta método POST");
+
+        res.setHeader("Content-Type", "text/html");
+        res.write("<html><head><meta charset='UTF-8'></head>");
+        res.write("<h2>¡Envío incorrecto!</h2>");
+        res.write("<p>El envío de datos tiene que ser mediante el método POST (utiliza Postman)</p>");
+        res.write("<p>Si utilizando el método POST el problema persiste, incluye esta línea de código en la terminal (simplemente activa la base de datos):</p>");
+        res.write("<code>brew services start mongodb-community@4.4</code>");
+        res.write("<p>A continuación se muestra tu lista de contactos actual</p><ul>");
+        //Listamos todos los contactos de la lista
+        for (let i = 0; i < findResult.length; i++) {
+          res.write(
+            "<li>Nombre: <i>" +
+              findResult[i]["?name"] +
+              "</i><br> Teléfono:  <i>" +
+              findResult[i]["phone"] +
+              "</i></li>"
+          );
+        }
+        res.write("</ul>");
+        res.write("</html>");
+        res.end();
+      })
   }
 });
 
