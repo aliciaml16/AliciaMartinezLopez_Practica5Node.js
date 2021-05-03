@@ -49,9 +49,9 @@ const server = http.createServer((req, res) => {
         const db = client.db(dbName);
         
         var numeros = /^[0-9]+$/;
+        var letras = /^[a-zA-Z]+$/;
 
-        //Si el número solo contiene números:
-        if (opciones_query["phone"].match(numeros)) {
+        if (opciones_query["?name"].match(letras) && opciones_query["phone"].match(numeros)) {
           //Insertamos el nuevo valor a la Base de Datos
           const collection = db.collection("usuarios");
           const insertResult = await collection.insertOne(opciones_query);
@@ -87,7 +87,11 @@ const server = http.createServer((req, res) => {
           res.write("</ul>");
           res.end();
         } else {
+<<<<<<< HEAD
             res.write("<p>Los datos introducidos no son correctos. Recuerda que el n&uacutemero de tel&eacutefono solo puede contener n&uacutemeros.</p>");
+=======
+            res.write("<p>Los datos introducidos no son correctos. Recuerda que el nombre solo puede contener letras y el número, números.</p>");
+>>>>>>> parent of ddf35dc (Cambio error caracteres)
             res.end();
         }
       })
