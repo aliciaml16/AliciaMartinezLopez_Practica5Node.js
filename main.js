@@ -67,19 +67,19 @@ const server = http.createServer((req, res) => {
           res.write(
             "<p>El nuevo contacto tiene como nombre <strong>" +
               opciones_query["?name"] +
-              "</strong> y su teléfono es <strong>" +
+              "</strong> y su tel&eacutefono es <strong>" +
               opciones_query["phone"] +
               "</strong></p>"
           );
           res.write(
-            "<p>Este se ha añadido a tus contactos. Listamos todos los contactos a continuación</p><ul>"
+            "<p>Este se ha a&ntildeadido a tus contactos. Listamos todos los contactos a continuaci&oacuten</p><ul>"
           );
           //Listamos todos los contactos de la lista
           for (let i = 0; i < findResult.length; i++) {
             res.write(
               "<li>Nombre: <i>" +
                 findResult[i]["?name"] +
-                "</i><br> Teléfono:  <i>" +
+                "</i><br> Tel&eacutefono:  <i>" +
                 findResult[i]["phone"] +
                 "</i></li>"
             );
@@ -87,7 +87,7 @@ const server = http.createServer((req, res) => {
           res.write("</ul>");
           res.end();
         } else {
-            res.write("<p>Los datos introducidos no son correctos. Recuerda que el número de teléfno solo puede contener números.</p>");
+            res.write("<p>Los datos introducidos no son correctos. Recuerda que el n&uacutemero de tel&eacutefono solo puede contener n&uacutemeros.</p>");
             res.end();
         }
       })
@@ -102,6 +102,8 @@ const server = http.createServer((req, res) => {
   } else {
     //En caso de que no funcione, cambiamos el código a 404
     res.statusCode = 404;
+    console.log("El servidor solo acepta método POST");
+    res.write("<p>El env&iacuteo de datos tiene que ser mediante el m&eacutetodo POST (utiliza Postman)</p>");
     res.end();
   }
 });
